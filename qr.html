@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Code | BICARA Ruwa Jurai</title>
+<link rel="icon" href="img/siger.svg">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .qr-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+  .qr-card{background:var(--maroon);color:var(--cream);border:4px solid var(--gold);border-radius:26px;padding:28px;text-align:center;max-width:340px;margin-inline:auto}
+  .qr-card img.logo{height:44px;margin:0 auto 10px}
+  .qr-card h2{font-size:1.6rem;color:var(--cream)}
+  .qr-card .sub{color:var(--gold);font-weight:500;margin-bottom:16px}
+  #qrbox{background:#fff;padding:14px;border-radius:14px;display:inline-block;line-height:0}
+  #qrbox img,#qrbox canvas{max-width:100%;height:auto}
+  .qr-card small{display:block;margin-top:14px;font-weight:300}
+  input[type=url]{width:100%;padding:14px 16px;border:3px solid var(--navy);border-radius:14px;font:inherit}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+  #warn{display:none;margin-top:16px;padding:14px 18px;border-radius:14px;background:#F6DEDF;font-size:.9rem}
+  @media(max-width:860px){.qr-wrap{grid-template-columns:1fr}}
+  @media print{.site-header,.site-footer,.controls,.page-hero{display:none}section{padding:0}.qr-wrap{display:block}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container">
+  <a href="index.html" class="brand"><img src="img/siger.svg" alt="">BICARA Ruwa Jurai</a>
+  <button class="menu-btn" aria-label="Buka menu" aria-expanded="false">&#9776;</button>
+  <nav class="nav"><a href="index.html#layanan">Layanan</a><a href="index.html#tentang">Piil Pesenggiri</a><a href="index.html#layanan" class="btn btn-gold">Mulai sekarang</a></nav>
+</div></header>
+<main>
+<div class="page-hero"><div class="tumpal gold"></div><div class="container"><h1>QR Code Website</h1><p>Pindai dengan kamera ponsel untuk membuka website BICARA Ruwa Jurai.</p></div></div>
+<section><div class="container qr-wrap">
+  <div class="controls">
+    <label for="url"><b>Alamat website</b></label>
+    <input type="url" id="url" placeholder="https://namamu.netlify.app/index.html">
+    <div id="warn">Halaman ini sedang dibuka dari komputer (file://), jadi QR belum bisa dipakai orang lain. Upload website ke hosting dulu, buka halaman ini dari alamat onlinenya, atau tempel alamat online website di kolom di atas.</div>
+    <div class="row">
+      <button class="btn btn-maroon" id="make">Buat QR</button>
+      <button class="btn btn-outline" id="dl" style="color:var(--maroon);border-color:var(--maroon)">Unduh PNG</button>
+      <button class="btn btn-outline" id="pr" style="color:var(--maroon);border-color:var(--maroon)">Cetak</button>
+    </div>
+    <p style="margin-top:20px;font-size:.9rem;color:rgba(42,27,22,.75)">Gunakan alamat yang sama untuk QR di kemasan dan punggung kartu. Setelah dicetak, uji pindai dari beberapa ponsel.</p>
+  </div>
+  <div class="qr-card">
+    <img class="logo" src="img/siger.svg" alt="">
+    <h2>BICARA</h2><div class="sub">Ruwa Jurai</div>
+    <div id="qrbox"></div>
+    <small>Pindai untuk panduan keluarga</small>
+  </div>
+</div></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/script.js"></script>
+<script>
+const box=document.getElementById('qrbox'),input=document.getElementById('url'),warn=document.getElementById('warn');
+if(location.protocol==='http:'||location.protocol==='https:'){input.value=new URL('index.html',location.href).href;}
+else{warn.style.display='block';}
+function make(){
+  const v=input.value.trim(); if(!v){input.focus();return}
+  box.innerHTML='';
+  new QRCode(box,{text:v,width:240,height:240,colorDark:'#2A1B16',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+}
+document.getElementById('make').addEventListener('click',make);
+document.getElementById('pr').addEventListener('click',()=>window.print());
+document.getElementById('dl').addEventListener('click',()=>{
+  const c=box.querySelector('canvas'); if(!c){make();return}
+  const a=document.createElement('a'); a.download='qr-bicara-ruwa-jurai.png'; a.href=c.toDataURL('image/png'); a.click();
+});
+if(input.value)make();
+</script>
+</body>
+</html>
